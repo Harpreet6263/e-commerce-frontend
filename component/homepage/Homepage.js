@@ -50,7 +50,7 @@ const Homepage = () => {
         <div className='flex justify-center mt-1'>
             <div id="carouselExampleIndicators" className="carousel slide w-[95%] sm:w-[80%] md:w-[70%] aspect-4/2 md:aspect-6/2" data-ride="carousel">
                 {!apiHit ? (
-                    <Skeleton className="w-full h-full rounded" />
+                    <div className="w-full h-full bg-gray-200 rounded animate-pulse" ></div>
                 ) : (
                     <div className="carousel-inner h-full">
                         {coruselData.length > 0 && coruselData.map((item, index) => (
