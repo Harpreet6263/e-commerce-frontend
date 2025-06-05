@@ -15,19 +15,20 @@ const layout = ({ children }) => {
     const router = useRouter();
 
     useEffect(() => {
+        if (Cookies.get("role") !== process.env.NEXT_PUBLIC_SELLER_ROLE_ID) {
+            router.prefetch('/', '/', { priority: true })
+            router.push('/');            
+        }
         if (token) {
             dispatch(myProfile()).then(res => {
                 if (!res?.payload?.success) {
-                    Cookies.remove("loggedIn");
-                    Cookies.remove("role");
+                    // Cookies.remove("loggedIn");
+                    // Cookies.remove("role");
                     toast.error(res.payload?.message);
                     router.prefetch('/', '/', { priority: true })
                     router.push('/');
                 }
                 // if (res?.payload?.data?.user?.role !== process.env.NEXT_PUBLIC_SELLER_ROLE_ID) {
-                //     toast.error("You are not authorized to access this page.");
-                //     Cookies.remove("loggedIn");
-                //     Cookies.remove("role");
                 //     router.prefetch('/', '/', { priority: true })
                 //     router.push('/');
                 // }

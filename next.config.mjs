@@ -26,7 +26,7 @@ const nextConfig = {
           },
           {
               protocol: 'https',
-              hostname: 'tv84.s3.ap-south-1.amazonaws.com',
+              hostname: 'lh3.googleusercontent.com',
               port: '',
               pathname: '**',
           },

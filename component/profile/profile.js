@@ -10,36 +10,44 @@ const Profile = () => {
 
   const handleGoogleSignIn = async () => {
     try {
-        const result = await signInWithPopup(auth, provider);
-        const data = {
-            authtoken: result.user.accessToken,
-        };
-        await dispatch(signInWithGoogle(data));
+      const result = await signInWithPopup(auth, provider);
+      const data = {
+        authtoken: result.user.accessToken,
+      };
+      const res = await dispatch(signInWithGoogle(data));
+
+      if (res?.payload && res?.payload?.success) {
+        if (res.payload?.data?.user?.role == process.env.NEXT_PUBLIC_SELLER_ROLE_ID) {
+
+          router.prefetch('/admin', '/', { priority: true })
+          router.push('/admin');
+        }
+      }
     } catch (error) {
-        console.error("Error signing in:", error);
+      console.error("Error signing in:", error);
     }
-};
+  };
   const logout = () => {
     dispatch(handleLogout());
   };
 
   return (
     <div>
-        <h1 className='text-2xl font-bold mb-4'>Profile</h1>
-        <p className='mb-4'>{user?.name}</p>
+      <h1 className='text-2xl font-bold mb-4'>Profile</h1>
+      <p className='mb-4'>{user?.name}</p>
       {user ? <button
         className='bg-blue-500 cursor-pointer text-white px-4 py-2 rounded'
         onClick={logout}
       >
         Log out
       </button> :
-      <button
-        className='bg-blue-500 cursor-pointer text-white px-4 py-2 rounded'
-        onClick={()=>{handleGoogleSignIn()}}
+        <button
+          className='bg-blue-500 cursor-pointer text-white px-4 py-2 rounded'
+          onClick={() => { handleGoogleSignIn() }}
         >
-        Log in
-      </button>
-            }
+          Log in
+        </button>
+      }
     </div>
   );
 };

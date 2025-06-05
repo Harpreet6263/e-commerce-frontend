@@ -66,8 +66,8 @@ export default function AddCorusel({ isOpen, onOpenChange, setRefresh, refresh }
   return (
     <Dialog.Root open={isOpen} onOpenChange={onOpenChange}>
       <Dialog.Portal>
-        <Dialog.Overlay className="fixed inset-0 bg-black/50 backdrop-blur-sm" />
-        <Dialog.Content className="fixed top-0 right-0 h-full w-[40vw] max-w-[70vw] bg-white shadow-lg p-6 flex flex-col">
+        <Dialog.Overlay className="fixed inset-0 bg-black/50 backdrop-blur-" />
+        <Dialog.Content className="fixed top-0 right-0 h-full sm:w-[40vw] max-w-[70vw] bg-white shadow-lg p-6 flex flex-col z-20">
           <div className="flex items-center justify-between mb-6 relative">
             <Dialog.Title className="text-lg font-semibold">Add Corusel</Dialog.Title>
             <Dialog.Close asChild>

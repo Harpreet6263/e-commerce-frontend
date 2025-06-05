@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { signInWithGoogle } from '@/redux/action/auth';
 import { useRouter } from 'next/navigation';
 import { auth, provider, signInWithPopup } from "@/utils/firebase";
+import Image from 'next/image';
 
 const Navbar = () => {
     const [open, setOpen] = useState(false);
@@ -29,23 +30,13 @@ const Navbar = () => {
                 console.error('Error fetching categories:', error);
             }
         };
-        const fetchProfile = async () => {
-            try {
-                const res = await dispatch(getCategorywithSubcategory());
-                if (res?.payload && res?.payload?.success) {
-                    const data = res?.payload;
-                    setCategory(data?.data);
-                    console.log('Fetched categories:', data?.data);
-                }
-            } catch (error) {
-                console.error('Error fetching categories:', error);
-            }
-        };
+
         fetchCategory();
     }
         , []);
 
     const userProfileClickHandler = () => {
+        setOpen(false);
         if (user) {
             router.push("/profile");
         } else {
@@ -55,7 +46,15 @@ const Navbar = () => {
                     const data = {
                         authtoken: result.user.accessToken,
                     };
-                    await dispatch(signInWithGoogle(data));
+                    const res = await dispatch(signInWithGoogle(data));
+
+                    if (res?.payload && res?.payload?.success) {
+                        if (res.payload?.data?.user?.role == process.env.NEXT_PUBLIC_SELLER_ROLE_ID) {
+
+                            router.prefetch('/admin', '/', { priority: true })
+                            router.push('/admin');
+                        }
+                    }
                 } catch (error) {
                     console.error("Error signing in:", error);
                 }
@@ -68,13 +67,24 @@ const Navbar = () => {
         <>
             <div className='flex items-center justify-between py-2 px-6 sm:px-20 bg-white border-b-1 border-gray-200'>
                 <Bars3CenterLeftIcon className='h-6 w-6 sm:hidden' onClick={() => { setOpen(true) }} />
-                <p className='text-2xl cursor-pointer' onClick={() => { router.push('/') }}>
+                <p className='text-2xl cursor-pointer m-0' onClick={() => { router.push('/') }}>
                     SHEIN
                 </p>
                 <div className='flex justify-between sm:max-w-[200px] sm:w-full cursor-pointer'>
-                    <UserIcon className='h-6 w-6 hidden sm:block ' onClick={() => {
-                        userProfileClickHandler();
-                    }} />
+                    {user ?
+                        <Image
+                            src={user?.profile_image || '/default-profile.png'}
+                            alt='Profile'
+                            width={24}
+                            height={24}
+                            className='h-6 w-6 rounded-full hidden sm:block'
+                            onClick={() => {
+                                userProfileClickHandler();
+                            }}
+                        />
+                        : <UserIcon className='h-6 w-6 sm:block ' onClick={() => {
+                            userProfileClickHandler();
+                        }} />}
                     <MagnifyingGlassIcon className='h-6 w-6 hidden sm:block' />
                     <ChatBubbleLeftIcon className='h-6 w-6 hidden sm:block' />
                     <ShoppingBagIcon className='h-6 w-6 ' />
@@ -83,21 +93,34 @@ const Navbar = () => {
             {open && <div className='fixed top-0 left-0 w-full h-[100dvh] bg-gray-500 opacity-50' onClick={() => { setOpen(false) }}></div>}
             <div className={`fixed top-0 left-0 w-[75%] h-[100dvh] bg-white z-50 transition-transform duration-300 ${open ? 'translate-x-0' : '-translate-x-full'}`}>
                 <div className='flex items-center justify-between py-6 px-6 sm:px-20 bg-white border-b-1 border-gray-200'>
-                    <p className='text-2xl'>
+                    <p className='text-2xl m-0 cursor-pointer' onClick={() => { router.push('/') }}>
                         SHEIN
                     </p>
                     <XMarkIcon className='h-6 w-6 text-black sm:hidden' onClick={() => { setOpen(false) }} />
                 </div>
-                <div className='flex flex-col items-center justify-start mt-4 h-full w-full'>
+                <div className='flex flex-col items-center justify-start mt-4 gap-1 h-full w-full'>
                     <div className='flex items-center justify-between gap-3 w-full px-6 py-2 hover:bg-gray-200 cursor-pointer' onClick={() => { userProfileClickHandler() }}>
-                        <p className='font-semibold'>Profile</p>
-                        <UserIcon className='w-5 h-5' />
+                        <p className='font-semibold m-0'>Profile</p>
+                        {user ?
+                        <Image
+                            src={user?.profile_image || '/default-profile.png'}
+                            alt='Profile'
+                            width={24}
+                            height={24}
+                            className='h-6 w-6 rounded-full'
+                            onClick={() => {
+                                userProfileClickHandler();
+                            }}
+                        />
+                        : <UserIcon className='h-6 w-6 ' onClick={() => {
+                            userProfileClickHandler();
+                        }} />}
                     </div>
 
                     {category?.length > 0 && category.map((item, index) => (
                         <div key={index} className=' w-full'>
-                            <div className='flex px-6 justify-between items-center gap-2 hover:bg-gray-200'>
-                                <p className='cursor-pointer py-2 '>{item?.name}</p>
+                            <div className='flex px-6 justify-between items-center gap-4 hover:bg-gray-200' onClick={() => {setOpen(false)}}>
+                                <p className='cursor-pointer py-2 m-0 '>{item?.name}</p>
                                 {subOpen && subIndex === index ? (
                                     <MinusIcon
                                         className="h-6 w-6 text-gray-500 cursor-pointer"

@@ -13,8 +13,10 @@ const layout = ({ children }) => {
     const dispatch = useDispatch()
     const token = Cookies.get("loggedIn");
     const router = useRouter();
-    
+
     useEffect(() => {
+        console.log("User in layout:", token);
+        
         if (token) {
             dispatch(myProfile()).then(res => {
                 if (!res?.payload?.success) {
@@ -23,8 +25,15 @@ const layout = ({ children }) => {
                     toast.error(res.payload?.data?.message);
                     router.prefetch('/', '/', { priority: true })
                     router.push('/');
+                } else {
+                    if (res.payload?.data?.role == process.env.NEXT_PUBLIC_SELLER_ROLE_ID) {
+                        router.prefetch('/admin', '/', { priority: true })
+                        router.push('/admin');
+                    }
                 }
+                console.log(res);
                 
+
             }).catch((error) => {
                 console.error("Error fetching profile:", error);
                 toast.error("An error occurred while fetching your profile.");
