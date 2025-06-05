@@ -82,7 +82,7 @@ const Navbar = () => {
                                 userProfileClickHandler();
                             }}
                         />
-                        : <UserIcon className='h-6 w-6 sm:block ' onClick={() => {
+                        : <UserIcon className='h-6 w-6 hidden sm:block ' onClick={() => {
                             userProfileClickHandler();
                         }} />}
                     <MagnifyingGlassIcon className='h-6 w-6 hidden sm:block' />
@@ -90,7 +90,7 @@ const Navbar = () => {
                     <ShoppingBagIcon className='h-6 w-6 ' />
                 </div>
             </div>
-            {open && <div className='fixed top-0 left-0 w-full h-[100dvh] bg-gray-500 opacity-50' onClick={() => { setOpen(false) }}></div>}
+            {open && <div className='fixed top-0 left-0 w-full h-[100dvh] bg-gray-500 opacity-50 z-10' onClick={() => { setOpen(false) }}></div>}
             <div className={`fixed top-0 left-0 w-[75%] h-[100dvh] bg-white z-50 transition-transform duration-300 ${open ? 'translate-x-0' : '-translate-x-full'}`}>
                 <div className='flex items-center justify-between py-6 px-6 sm:px-20 bg-white border-b-1 border-gray-200'>
                     <p className='text-2xl m-0 cursor-pointer' onClick={() => { router.push('/') }}>

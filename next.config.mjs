@@ -32,7 +32,7 @@ const nextConfig = {
           },
           {
               protocol: 'https',
-              hostname: 'media.istockphoto.com',  // Add this line
+              hostname: 'images.pexels.com',  // Add this line
               port: '',
               pathname: '**',
           },

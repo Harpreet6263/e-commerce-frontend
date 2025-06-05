@@ -45,7 +45,7 @@ const Corusel = () => {
 
 
     return (
-            <div id="carouselExampleIndicators" className="carousel slide w-[95%] sm:w-[80%] md:w-[70%] aspect-4/2 md:aspect-6/2" data-ride="carousel">
+            <div id="carouselExampleIndicators" className="carousel slide w-[95%] sm:w-[80%] md:w-[70%] aspect-4/2 md:aspect-6/2 overflow-hidden" data-ride="carousel">
                 {!apiHit ? (
                     <div className="w-full h-full bg-gray-200 rounded animate-pulse" ></div>
                 ) : (

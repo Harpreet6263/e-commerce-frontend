@@ -22,6 +22,7 @@
     "bootstrap": "^5.3.6",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "embla-carousel-react": "^8.6.0",
     "firebase": "^11.8.1",
     "framer-motion": "^11.5.6",
     "heroui-cli": "^1.2.3",
